@@ -151,35 +151,20 @@ const BillCalculator = () => {
             </div>
 
             {/* Neighbor Meter Readings */}
-            <div className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="lastReading">Neighbor's Last Reading</Label>
-                  <Input
-                    id="lastReading"
-                    type="number"
-                    placeholder="e.g., 1200"
-                    value={billData.neighborLastReading}
-                    onChange={(e) => handleInputChange("neighborLastReading", e.target.value)}
-                    className="focus:ring-electric focus:border-electric"
-                  />
-                </div>
-                
-                <div className="space-y-2">
-                  <Label htmlFor="currentReading">Neighbor's Current Reading</Label>
-                  <Input
-                    id="currentReading"
-                    type="number"
-                    placeholder="e.g., 1380"
-                    value={billData.neighborCurrentReading}
-                    onChange={(e) => handleInputChange("neighborCurrentReading", e.target.value)}
-                    className="focus:ring-electric focus:border-electric"
-                  />
-                </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-end">
+              <div className="space-y-2">
+                <Label htmlFor="lastReading">Neighbor's Last Reading</Label>
+                <Input
+                  id="lastReading"
+                  type="number"
+                  placeholder="e.g., 1200"
+                  value={billData.neighborLastReading}
+                  onChange={(e) => handleInputChange("neighborLastReading", e.target.value)}
+                  className="focus:ring-electric focus:border-electric"
+                />
               </div>
               
-              {/* Copy Button */}
-              <div className="flex justify-center">
+              <div className="hidden md:flex justify-center pb-2">
                 <Button
                   variant="outline"
                   size="sm"
@@ -187,8 +172,32 @@ const BillCalculator = () => {
                   className="border-electric text-electric hover:bg-electric hover:text-white"
                   disabled={!billData.neighborCurrentReading}
                 >
-                  <ArrowDown className="h-4 w-4 mr-2" />
-                  Copy Current → Last Reading
+                  <ArrowDown className="h-4 w-4" />
+                </Button>
+              </div>
+              
+              <div className="space-y-2">
+                <Label htmlFor="currentReading">Neighbor's Current Reading</Label>
+                <Input
+                  id="currentReading"
+                  type="number"
+                  placeholder="e.g., 1380"
+                  value={billData.neighborCurrentReading}
+                  onChange={(e) => handleInputChange("neighborCurrentReading", e.target.value)}
+                  className="focus:ring-electric focus:border-electric"
+                />
+              </div>
+              
+              {/* Mobile copy button */}
+              <div className="md:hidden flex justify-center col-span-full">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={copyCurrentToLast}
+                  className="border-electric text-electric hover:bg-electric hover:text-white"
+                  disabled={!billData.neighborCurrentReading}
+                >
+                  <ArrowDown className="h-4 w-4" />
                 </Button>
               </div>
             </div>
