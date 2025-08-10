@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { Calculator, Zap, Share2, Settings } from "lucide-react";
+import { Calculator, Zap, Share2, Settings, ArrowDown } from "lucide-react";
 import { toast } from "sonner";
 
 interface BillData {
@@ -89,6 +89,15 @@ const BillCalculator = () => {
     toast.success("WhatsApp link opened!");
   };
 
+  const copyCurrentToLast = () => {
+    if (billData.neighborCurrentReading) {
+      handleInputChange("neighborLastReading", billData.neighborCurrentReading);
+      toast.success("Current reading copied to last reading!");
+    } else {
+      toast.error("Please enter current reading first");
+    }
+  };
+
   return (
     <div className="min-h-screen bg-background p-4">
       <div className="max-w-2xl mx-auto space-y-6">
@@ -142,29 +151,45 @@ const BillCalculator = () => {
             </div>
 
             {/* Neighbor Meter Readings */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="lastReading">Neighbor's Last Reading</Label>
-                <Input
-                  id="lastReading"
-                  type="number"
-                  placeholder="e.g., 1200"
-                  value={billData.neighborLastReading}
-                  onChange={(e) => handleInputChange("neighborLastReading", e.target.value)}
-                  className="focus:ring-electric focus:border-electric"
-                />
+            <div className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="lastReading">Neighbor's Last Reading</Label>
+                  <Input
+                    id="lastReading"
+                    type="number"
+                    placeholder="e.g., 1200"
+                    value={billData.neighborLastReading}
+                    onChange={(e) => handleInputChange("neighborLastReading", e.target.value)}
+                    className="focus:ring-electric focus:border-electric"
+                  />
+                </div>
+                
+                <div className="space-y-2">
+                  <Label htmlFor="currentReading">Neighbor's Current Reading</Label>
+                  <Input
+                    id="currentReading"
+                    type="number"
+                    placeholder="e.g., 1380"
+                    value={billData.neighborCurrentReading}
+                    onChange={(e) => handleInputChange("neighborCurrentReading", e.target.value)}
+                    className="focus:ring-electric focus:border-electric"
+                  />
+                </div>
               </div>
               
-              <div className="space-y-2">
-                <Label htmlFor="currentReading">Neighbor's Current Reading</Label>
-                <Input
-                  id="currentReading"
-                  type="number"
-                  placeholder="e.g., 1380"
-                  value={billData.neighborCurrentReading}
-                  onChange={(e) => handleInputChange("neighborCurrentReading", e.target.value)}
-                  className="focus:ring-electric focus:border-electric"
-                />
+              {/* Copy Button */}
+              <div className="flex justify-center">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={copyCurrentToLast}
+                  className="border-electric text-electric hover:bg-electric hover:text-white"
+                  disabled={!billData.neighborCurrentReading}
+                >
+                  <ArrowDown className="h-4 w-4 mr-2" />
+                  Copy Current → Last Reading
+                </Button>
               </div>
             </div>
 
