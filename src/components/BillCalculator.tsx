@@ -303,6 +303,9 @@ const BillCalculator = () => {
                   <p className="text-2xl font-bold text-success">
                     ₹{calculation.neighborShare}
                   </p>
+                  <p className="text-xs text-muted-foreground">
+                    ₹{calculation.fixedShare} fixed + ₹{calculation.usageShare} usage
+                  </p>
                 </div>
                 
                 <div className="text-center p-4 bg-card rounded-lg border">
