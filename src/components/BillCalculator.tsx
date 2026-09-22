@@ -22,7 +22,7 @@ const BillCalculator = () => {
     fixedCharges: "",
     neighborLastReading: "",
     neighborCurrentReading: "",
-    neighborPhone: "919036004030",
+    neighborPhone: "919945535734",
   });
 
   const [showPhoneEdit, setShowPhoneEdit] = useState(false);
@@ -32,7 +32,12 @@ const BillCalculator = () => {
     try {
       const savedData = localStorage.getItem('billCalculatorData');
       if (savedData) {
-        setBillData(JSON.parse(savedData));
+        const parsed = JSON.parse(savedData);
+        // Migrate previously saved default phone to the new default
+        if (parsed.neighborPhone === "919036004030") {
+          parsed.neighborPhone = "919945535734";
+        }
+        setBillData(parsed);
       }
     } catch (error) {
       console.error('Error loading saved data:', error);
