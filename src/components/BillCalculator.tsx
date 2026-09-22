@@ -134,7 +134,7 @@ const BillCalculator = () => {
           </CardHeader>
           <CardContent className="space-y-6">
             {/* Bill Inputs */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="totalBill">Total Bill Amount (₹)</Label>
                 <Input
@@ -146,7 +146,19 @@ const BillCalculator = () => {
                   className="focus:ring-electric focus:border-electric"
                 />
               </div>
-              
+
+              <div className="space-y-2">
+                <Label htmlFor="fixedCharges">Fixed Charges (₹)</Label>
+                <Input
+                  id="fixedCharges"
+                  type="number"
+                  placeholder="e.g., 200"
+                  value={billData.fixedCharges}
+                  onChange={(e) => handleInputChange("fixedCharges", e.target.value)}
+                  className="focus:ring-electric focus:border-electric"
+                />
+              </div>
+
               <div className="space-y-2">
                 <Label htmlFor="totalConsumption">Total Consumption (Units)</Label>
                 <Input
