@@ -9,6 +9,7 @@ import { toast } from "sonner";
 interface BillData {
   totalBillAmount: string;
   totalConsumption: string;
+  fixedCharges: string;
   neighborLastReading: string;
   neighborCurrentReading: string;
   neighborPhone: string;
@@ -18,6 +19,7 @@ const BillCalculator = () => {
   const [billData, setBillData] = useState<BillData>({
     totalBillAmount: "",
     totalConsumption: "",
+    fixedCharges: "",
     neighborLastReading: "",
     neighborCurrentReading: "",
     neighborPhone: "919036004030",
@@ -58,17 +60,25 @@ const BillCalculator = () => {
     const totalUnits = parseFloat(billData.totalConsumption);
     const lastReading = parseFloat(billData.neighborLastReading);
     const currentReading = parseFloat(billData.neighborCurrentReading);
+    const fixedCharges = billData.fixedCharges !== undefined && billData.fixedCharges !== ""
+      ? parseFloat(billData.fixedCharges)
+      : 0;
 
-    if (isNaN(totalBill) || isNaN(totalUnits) || isNaN(lastReading) || isNaN(currentReading)) {
+    if (isNaN(totalBill) || isNaN(totalUnits) || isNaN(lastReading) || isNaN(currentReading) || isNaN(fixedCharges)) {
       return null;
     }
 
     const neighborConsumption = currentReading - lastReading;
-    const neighborShare = (neighborConsumption / totalUnits) * totalBill;
+    const variableBill = totalBill - fixedCharges;
+    const usageShare = (neighborConsumption / totalUnits) * variableBill;
+    const fixedShare = fixedCharges / 2;
+    const neighborShare = Math.round(fixedShare + usageShare);
 
     return {
       neighborConsumption,
-      neighborShare: Math.round(neighborShare),
+      neighborShare,
+      fixedShare: Math.round(fixedShare),
+      usageShare: Math.round(usageShare),
       totalUnits,
     };
   };
