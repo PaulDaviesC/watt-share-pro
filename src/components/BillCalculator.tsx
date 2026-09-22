@@ -9,6 +9,7 @@ import { toast } from "sonner";
 interface BillData {
   totalBillAmount: string;
   totalConsumption: string;
+  fixedCharges: string;
   neighborLastReading: string;
   neighborCurrentReading: string;
   neighborPhone: string;
@@ -18,6 +19,7 @@ const BillCalculator = () => {
   const [billData, setBillData] = useState<BillData>({
     totalBillAmount: "",
     totalConsumption: "",
+    fixedCharges: "",
     neighborLastReading: "",
     neighborCurrentReading: "",
     neighborPhone: "919036004030",
@@ -58,17 +60,25 @@ const BillCalculator = () => {
     const totalUnits = parseFloat(billData.totalConsumption);
     const lastReading = parseFloat(billData.neighborLastReading);
     const currentReading = parseFloat(billData.neighborCurrentReading);
+    const fixedCharges = billData.fixedCharges !== undefined && billData.fixedCharges !== ""
+      ? parseFloat(billData.fixedCharges)
+      : 0;
 
-    if (isNaN(totalBill) || isNaN(totalUnits) || isNaN(lastReading) || isNaN(currentReading)) {
+    if (isNaN(totalBill) || isNaN(totalUnits) || isNaN(lastReading) || isNaN(currentReading) || isNaN(fixedCharges)) {
       return null;
     }
 
     const neighborConsumption = currentReading - lastReading;
-    const neighborShare = (neighborConsumption / totalUnits) * totalBill;
+    const variableBill = totalBill - fixedCharges;
+    const usageShare = (neighborConsumption / totalUnits) * variableBill;
+    const fixedShare = fixedCharges / 2;
+    const neighborShare = Math.round(fixedShare + usageShare);
 
     return {
       neighborConsumption,
-      neighborShare: Math.round(neighborShare),
+      neighborShare,
+      fixedShare: Math.round(fixedShare),
+      usageShare: Math.round(usageShare),
       totalUnits,
     };
   };
@@ -124,7 +134,7 @@ const BillCalculator = () => {
           </CardHeader>
           <CardContent className="space-y-6">
             {/* Bill Inputs */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="totalBill">Total Bill Amount (₹)</Label>
                 <Input
@@ -136,7 +146,19 @@ const BillCalculator = () => {
                   className="focus:ring-electric focus:border-electric"
                 />
               </div>
-              
+
+              <div className="space-y-2">
+                <Label htmlFor="fixedCharges">Fixed Charges (₹)</Label>
+                <Input
+                  id="fixedCharges"
+                  type="number"
+                  placeholder="e.g., 200"
+                  value={billData.fixedCharges}
+                  onChange={(e) => handleInputChange("fixedCharges", e.target.value)}
+                  className="focus:ring-electric focus:border-electric"
+                />
+              </div>
+
               <div className="space-y-2">
                 <Label htmlFor="totalConsumption">Total Consumption (Units)</Label>
                 <Input
@@ -280,6 +302,9 @@ const BillCalculator = () => {
                   <p className="text-sm text-muted-foreground">Neighbor's Share</p>
                   <p className="text-2xl font-bold text-success">
                     ₹{calculation.neighborShare}
+                  </p>
+                  <p className="text-xs text-muted-foreground">
+                    ₹{calculation.fixedShare} fixed + ₹{calculation.usageShare} usage
                   </p>
                 </div>
                 
