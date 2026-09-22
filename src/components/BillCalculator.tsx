@@ -91,7 +91,7 @@ const BillCalculator = () => {
       return;
     }
 
-    const message = `Please pay Rs.${calculation.neighborShare} as last month's electricity bill. Your consumption: ${calculation.neighborConsumption} units/${calculation.totalUnits} units`;
+    const message = `Please pay Rs.${calculation.neighborShare} as last month's electricity bill. Your consumption: ${calculation.neighborConsumption} units/${calculation.totalUnits} units. Breakup: Fixed charges: Rs.${calculation.fixedShare}, Usage charges: Rs.${calculation.usageShare}`;
     const encodedMessage = encodeURIComponent(message);
     const whatsappUrl = `https://wa.me/${billData.neighborPhone}?text=${encodedMessage}`;
     
